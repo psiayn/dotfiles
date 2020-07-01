@@ -34,8 +34,6 @@ filetype plugin indent on    " required
 set nu
 set foldmethod=syntax
 set tabstop=4
-noremap y "+y
-noremap p "+p
 
 let g:ycm_semantic_triggers = {
   \   'cpp': [ 're!\w{2}' ],
@@ -43,8 +41,12 @@ let g:ycm_semantic_triggers = {
   \ }
 
 
+syntax on
+
 let g:ycm_auto_trigger = 1
 let g:ycm_complete_in_comments = 1
 let g:ycm_seed_identifiers_with_syntax = 1
 set splitbelow
 set splitright
+set background=dark
+let base16colorspace=256
