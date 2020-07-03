@@ -31,6 +31,7 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
+
 set nu
 set foldmethod=syntax
 set tabstop=4
@@ -40,6 +41,11 @@ let g:ycm_semantic_triggers = {
   \   'c': [ 're!\w{2}' ]
   \ }
 
+" fixing random opening of folds when typing
+autocmd InsertEnter * let w:last_fdm=&foldmethod | setlocal foldmethod=manual
+autocmd InsertLeave * let &l:foldmethod=w:last_fdm
+autocmd InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
+autocmd InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
 
 syntax on
 
