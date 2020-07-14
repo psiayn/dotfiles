@@ -1,8 +1,8 @@
 # Dotfiles
-For now only vim
-- Uses vundle
-- Go to [vimawesome](https://vimawesome.com/) for the instruction for installing 
 
-Usage:
-`cd dotfiles`
-`cp .vimrc ~/.vimrc'
+Dotfiles are:
+- .vimrc
+- .zshrc
+- i3 config
+- i3status-rust config.toml
+
