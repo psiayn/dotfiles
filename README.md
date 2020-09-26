@@ -5,4 +5,5 @@ Dotfiles are:
 - .zshrc
 - i3 config
 - i3status-rust config.toml
-
+- init.vim 
+- .tmux.conf
