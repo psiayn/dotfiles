@@ -3,10 +3,29 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
-(use-package tron-legacy-theme
+;; (use-package tron-legacy-theme
+;;  :config
+;;  (setq tron-legacy-theme-vivid-cursor t)
+;;  (load-theme 'tron-legacy t))
+
+(use-package doom-themes
   :config
-  (setq tron-legacy-theme-vivid-cursor t)
-  (load-theme 'tron-legacy t))
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-vibrant t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+  (doom-themes-treemacs-config)
+  
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
 
 (require 'evil)
 (evil-mode 1)
@@ -21,9 +40,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("1db4be958a1df556190253eaee2717c554402f93d96ff6ec9e206567d906817e" default))
+   '("79278310dd6cacf2d2f491063c4ab8b129fee2a498e4c25912ddaa6c3c5b621e" "1db4be958a1df556190253eaee2717c554402f93d96ff6ec9e206567d906817e" default))
  '(package-selected-packages
-   '(vterm meghanada zones swiper ivy tron-legacy-theme company-jedi elpy centaur-tabs treemacs-persp treemacs-magit treemacs-icons-dired treemacs-projectile use-package projectile treemacs-evil treemacs gotham-theme evil)))
+   '(dashboard page-break-lines treemacs-all-the-icons doom-themes irony vterm meghanada zones swiper ivy tron-legacy-theme company-jedi elpy centaur-tabs treemacs-persp treemacs-magit treemacs-icons-dired treemacs-projectile use-package projectile treemacs-evil treemacs evil)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -147,3 +166,90 @@
 (elpy-enable)
 (pyvenv-mode)
 
+;; company mode and ivy mode
+(require 'company)
+(global-company-mode)
+
+(require 'ivy)
+(ivy-mode)
+
+;; irony mode
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'objc-mode-hook 'irony-mode)
+
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+
+;; mu4e mail
+(require 'mu4e)
+
+;; default
+(setq mu4e-maildir (expand-file-name "~/Maildir"))
+
+(setq mu4e-drafts-folder "/[Gmail].Drafts")
+(setq mu4e-sent-folder   "/[Gmail].Sent Mail")
+(setq mu4e-trash-folder  "/[Gmail].Trash")
+
+;; don't save message to Sent Messages, GMail/IMAP will take care of this
+(setq mu4e-sent-messages-behavior 'delete)
+
+;; setup some handy shortcuts
+(setq mu4e-maildir-shortcuts
+      '(("/INBOX"             . ?i)
+        ("/[Gmail].Sent Mail" . ?s)
+        ("/[Gmail].Trash"     . ?t)))
+
+;; allow for updating mail using 'U' in the main view:
+(setq mu4e-get-mail-command "offlineimap")
+
+;; something about ourselves
+;; I don't use a signature...
+(setq
+ user-mail-address "areina0@gmail.com"
+ user-full-name  "Toni Reina"
+ ;; message-signature
+ ;;  (concat
+ ;;    "Foo X. Bar\n"
+ ;;    "http://www.example.com\n")
+)
+
+;; sending mail -- replace USERNAME with your gmail username
+;; also, make sure the gnutls command line utils are installed
+;; package 'gnutls-bin' in Debian/Ubuntu, 'gnutls' in Archlinux.
+
+(require 'smtpmail)
+
+(setq message-send-mail-function 'smtpmail-send-it
+      starttls-use-gnutls t
+      smtpmail-starttls-credentials
+      '(("smtp.gmail.com" 587 nil nil))
+      smtpmail-auth-credentials
+      (expand-file-name "~/.authinfo.gpg")
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587
+      smtpmail-debug-info t)
+;; setting up dashboard :nezuko_pump:
+(require 'dashboard)
+(dashboard-setup-startup-hook)
+;; Set the title
+(setq dashboard-banner-logo-title "Welcome to Widemacs")
+;; Set the banner
+(setq dashboard-startup-banner "/home/psiayn/.emacs.d/memes/wide.png")
+;; Value can be
+;; 'official which displays the official emacs logo
+;; 'logo which displays an alternative emacs logo
+;; 1, 2 or 3 which displays one of the text banners
+;; "path/to/your/image.png" or "path/to/your/text.txt" which displays whatever image/text you would prefer
+
+;; Content is not centered by default. To center, set
+(setq dashboard-center-content t)
+
+;; To disable shortcut "jump" indicators for each section, set
+;; (setq dashboard-show-shortcuts nil)
+
+(setq dashboard-items '((recents  . 5)
+                        (bookmarks . 5)
+                        (projects . 5)
+                        (agenda . 5)
+                        (registers . 5)))
