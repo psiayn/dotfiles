@@ -1,3 +1,5 @@
+" plugins
+" {{{
 " Specify a directory for plugins
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin(stdpath('data') . '/plugged')
@@ -15,6 +17,9 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 " Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
 Plug 'fatih/vim-go', { 'tag': '*' }
 
+" haskell
+Plug 'https://github.com/neovimhaskell/haskell-vim.git'
+
 " Plugin options
 Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
 
@@ -26,8 +31,12 @@ Plug 'vim-ctrlspace/vim-ctrlspace'
 " Use release branch (recommend)
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-" the god itself, ORG MODE!
-Plug 'jceb/vim-orgmode'
+" ycm for stuff ig
+" Plug 'valloric/youcompleteme'
+
+" sxhkd
+Plug 'kovetskiy/sxhkd-vim'
+
 
 " icon
 Plug 'ryanoasis/vim-devicons'
@@ -35,11 +44,12 @@ Plug 'ryanoasis/vim-devicons'
 
 " Initialize plugin system
 call plug#end()
-
+" }}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""" 			Coc.Nvim                          """""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" {{{
 " TextEdit might fail if hidden is not set.
 set hidden
 
@@ -193,13 +203,45 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+" }}}
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""" AUTOCMDS """""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+\" {{{
+function CompileToPdf()
+	" let filename = expand('%:t:r')
+	!groff -ms -e -tbl <afile> > '%:t:r.ps' && ps2pdf '%:t:r.ps'
+endfunction
+
+
+autocmd FileType nroff setlocal fdm=marker
+autocmd FileType vim setlocal fdm=marker
+autocmd FileType zsh setlocal fdm=marker
+autocmd BufWritePost *.tr call CompileToPdf()
+autocmd BufWritePost ~/clones/dwm/* !SUDO_ASKPASS=/usr/bin/qt4-ssh-askpass sudo make clean install
+autocmd BufWritePost .zshrc !source ~/.zshrc
+
+augroup FileTypeSpecificAutocommands
+	autocmd FileType javascript setlocal tabstop=2 softtabstop=2 shiftwidth=2
+augroup END
+\" }}}
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""" MISC """""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" {{{
 " setting numbers
 set nu
 
 " trigger nerdtree
 map <C-n> :NERDTreeToggle<CR>
 
-colorscheme onedark
-let g:airline_theme='onedark'
+" trigger CtrlSpace
+let g:CtrlSpaceDefaultMappingKey = "<C-space> "
+set hidden
 
+" set foldmethod
+set foldmethod=indent
+
+filetype plugin indent on
+" }}}
