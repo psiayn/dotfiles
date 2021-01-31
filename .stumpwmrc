@@ -1,0 +1,30 @@
+;; -*-lisp-*-
+;;
+(in-package :stumpwm)
+
+;; * Adding modules
+(set-module-dir "~/clones/stumpwm-contrib")
+
+(sb-posix:putenv "SBCL_HOME=/home/diego/.guix-profile/lib/sbcl")
+
+(load-module "app-menu")
+(load-module "amixer")
+(load-module "clipboard-history")
+(load-module "end-session")
+(load-module "pass")
+(load-module "surfraw")
+(load-module "command-history")
+(load-module "stumptray")
+(load-module "battery-portable")
+(load-module "wifi")
+;;(load-module "stumpish")
+;; LOAD PRIVATE PRE-CONFIG FILES HERE (load "~/.config/stumpwm/userenv")
+(load "~/clones/stumpwm-config/conf.d/customs")
+;;(load "~/clones/stumpwm-config/conf.d/equake-conf")
+(load "~/clones/stumpwm-config/conf.d/keybindings")
+(load "~/clones/stumpwm-config/conf.d/autostart")
+(load "~/clones/stumpwm-config/conf.d/lisp-server")
+;; LOAD PRIVATE POST-CONFIG FILES HERE
+
+(mode-line)
+;;(stumptray::stumptray)
